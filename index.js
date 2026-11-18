@@ -2,12 +2,14 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const dishesRouter = require('./routes/dishes');
+const errorHandler = require('./middleware/errorHandler');
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 app.use('/api/dishes', dishesRouter);
+app.use(errorHandler);
 
 const connectDB = async () => {
   try {
