@@ -35,6 +35,9 @@ PORT=3000
 ## 🚀 Uso
 
 ```bash
+# Sembrar datos iniciales (10 platos)
+node seed.js
+
 # Modo desarrollo
 npm run dev
 
@@ -47,11 +50,14 @@ npm start
 ```
 ├── index.js              # App de Express, conexión a MongoDB y puesta en escucha
 ├── models/
-│   └── Task.js           # Definición de esquema (modelo)
+│   └── Dish.js           # Modelo Dish (platos del restaurante)
 ├── routes/
-│   └── tasks.js          # Rutas CRUD de tasks
+│   ├── crudFactory.js    # Factory CRUD reutilizable
+│   └── dishes.js         # CRUD de dishes (usa factory)
 ├── middleware/
 │   └── errorHandler.js   # Middleware de manejo de errores
+├── seed.js               # Seed de datos (10 platos)
+├── test.http             # Sentencias para probar los endpoints
 ├── .env                  # Variables de entorno
 ├── .gitignore
 └── package.json
@@ -59,45 +65,57 @@ npm start
 
 ## 🔌 Endpoints de la API
 
-Base URL: `http://localhost:3000/api/tasks`
+### Platos del restaurante — `/api/dishes`
+
+Base URL: `http://localhost:3000/api/dishes`
 
 | Método | Endpoint | Descripción |
 |--------|----------|-------------|
-| GET | `/api/tasks` | Obtener todas las tasks (filtros opcionales: `?completed=true|false`, `?title=...`) |
-| GET | `/api/tasks/:id` | Obtener una task por su ID |
-| POST | `/api/tasks` | Crear una nueva task |
-| PUT | `/api/tasks/:id` | Actualizar una task |
-| DELETE | `/api/tasks/:id` | Eliminar una task |
+| GET | `/api/dishes` | Obtener todos los platos (filtros: `?vegan`, `?celiacFriendly`, `?diabeticFriendly`, `?name`) |
+| GET | `/api/dishes/:id` | Obtener un plato por su ID |
+| POST | `/api/dishes` | Crear un nuevo plato |
+| PUT | `/api/dishes/:id` | Actualizar un plato |
+| DELETE | `/api/dishes/:id` | Eliminar un plato |
 
-## 🗄️ Modelo de datos (Task)
+## 🗄️ Modelo de datos (Dish)
 
 ```js
-const taskSchema = new mongoose.Schema({
-  title:       { type: String, required: true, trim: true },
-  description: { type: String, trim: true },
-  completed:   { type: Boolean, default: false },
-  createdAt:   { type: Date, default: Date.now },
-  updatedAt:   { type: Date, default: Date.now },
+const dishSchema = new mongoose.Schema({
+  name: { type: String, required: true, trim: true, maxlength: 100 },
+  description: { type: String, trim: true, maxlength: 1000 },
+  ingredients: [{ type: String, trim: true }],
+  price: { type: Number, required: true, min: 0 },
+  celiacFriendly: { type: Boolean, default: false },
+  vegan: { type: Boolean, default: false },
+  diabeticFriendly: { type: Boolean, default: false },
+  calories: { type: Number, default: 0, min: 0 },
+  image: { type: String, default: '' },
 }, { timestamps: true });
 ```
 
 ## ✅ Validaciones (express-validator)
 
-- POST: `title` obligatorio, máximo 100 caracteres
-- `description`: opcional, máximo 500 caracteres
-- `completed`: opcional, booleano
+- POST: `name` obligatorio, máximo 100 caracteres; `price` obligatorio numérico mayor o igual a 0
+- `description`: opcional, máximo 1000 caracteres
+- `ingredients`: opcional, array de strings
+- `celiacFriendly`, `vegan`, `diabeticFriendly`: opcionales, booleanos
+- `calories`: opcional, entero mayor o igual a 0
+- `image`: opcional, string
 
 ## ✨ Funcionalidades de Mongoose
 
-- Esquemas con validaciones (`required`, `trim`, `default`, `type`)
+- Esquemas con validaciones (`required`, `trim`, `default`, `min`, `maxlength`)
 - Timestamps automáticos (`createdAt`, `updatedAt`)
 - Modelos reutilizables para cada colección
+- `findByIdAndUpdate` con `runValidators`
 
 ## 📌 Notas
 
-- Para crear nuevos modelos, duplica `models/Task.js` y ajusta el schema, y registra su router en `index.js`.
+- Para crear nuevos modelos, duplica `models/Dish.js` y ajusta el schema, y registra su router en `index.js`.
 - Si usas **MongoDB Atlas**, reemplaza `MONGO_URI` por la cadena de conexión segura.
 
 ## 🧪 Pruebas
 
-Las pruebas se realizan únicamente desde el backend (API REST).
+- Endpoints documentados en `test.http`.
+- Seed de datos en `seed.js` (10 platos).
+- Las pruebas se realizan únicamente desde el backend (API REST).

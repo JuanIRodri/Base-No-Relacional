@@ -1,0 +1,34 @@
+@baseUrl = http://localhost:3000/api/dishes
+
+### Obtener todos los platos
+GET {{baseUrl}}
+
+### Obtener un plato por ID
+GET {{baseUrl}}/6640f0b0e4b0e0e0e0e0e0e0
+
+### Crear un plato
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "name": "Ensalada Cesar",
+  "description": "Lechuga fresca con pollo y parmesano.",
+  "ingredients": ["lechuga", "pollo", "parmesano", "croutons", "salsa ranch"],
+  "price": 8.99,
+  "celiacFriendly": false,
+  "vegan": false,
+  "diabeticFriendly": false,
+  "calories": 350,
+  "image": "https://via.placeholder.com/400x300?text=Ensalada+Cesar"
+}
+
+### Actualizar un plato
+PUT {{baseUrl}}/6640f0b0e4b0e0e0e0e0e0e0
+Content-Type: application/json
+
+{
+  "price": 9.99
+}
+
+### Eliminar un plato
+DELETE {{baseUrl}}/6640f0b0e4b0e0e0e0e0e0e0

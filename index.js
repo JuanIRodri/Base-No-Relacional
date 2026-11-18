@@ -1,13 +1,13 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const tasksRouter = require('./routes/tasks');
+const dishesRouter = require('./routes/dishes');
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use('/api/tasks', tasksRouter);
+app.use('/api/dishes', dishesRouter);
 
 const connectDB = async () => {
   try {
