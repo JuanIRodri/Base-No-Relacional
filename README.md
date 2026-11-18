@@ -45,14 +45,14 @@ npm start
 ## 📁 Estructura del proyecto
 
 ```
-├── index.js          # App de Express, conexión a MongoDB y puesta en escucha
+├── index.js              # App de Express, conexión a MongoDB y puesta en escucha
 ├── models/
-│   └── Task.js       # Definición de esquema (modelo)
+│   └── Task.js           # Definición de esquema (modelo)
 ├── routes/
-│   └── tasks.js      # Rutas CRUD de tasks
+│   └── tasks.js          # Rutas CRUD de tasks
 ├── middleware/
-│   └── errorHandler.js  # Middleware de manejo de errores
-├── .env              # Variables de entorno
+│   └── errorHandler.js   # Middleware de manejo de errores
+├── .env                  # Variables de entorno
 ├── .gitignore
 └── package.json
 ```
@@ -63,7 +63,7 @@ Base URL: `http://localhost:3000/api/tasks`
 
 | Método | Endpoint | Descripción |
 |--------|----------|-------------|
-| GET | `/api/tasks` | Obtener todas las tasks |
+| GET | `/api/tasks` | Obtener todas las tasks (filtros opcionales: `?completed=true|false`, `?title=...`) |
 | GET | `/api/tasks/:id` | Obtener una task por su ID |
 | POST | `/api/tasks` | Crear una nueva task |
 | PUT | `/api/tasks/:id` | Actualizar una task |
